@@ -1,2 +1,0 @@
-GP.exe Gredfsfdsf
-pause
