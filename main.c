@@ -52,7 +52,7 @@ typedef struct in_addr IN_ADDR;
 #define CONTROL_MESSAGE 0x08
 #define PING_MESSAGE 0x11
 ///192.168.0.100 IP de l'IA prof
-int color;
+int color = 10;
 
 typedef struct
 {
@@ -227,12 +227,17 @@ void fillcase(/*int **array,*/ const int sizex, const int sizey)
     {
         for(j=0; j<sizey; j++)
         {
-            array[i][j] = rand() %2;
+            array[i][j] = 0;
 
         }
 
     }
-
+    array[3][3] = 1;
+    array[3][4] = 1;
+    array[3][5] = 10;
+    array[4][4] = 10;
+    array[4][5] = 1;
+    array[4][3] = 10;
     for(i=0; i<sizey; i++)
     {
         for(j=0; j<sizex; j++)
@@ -245,7 +250,10 @@ void fillcase(/*int **array,*/ const int sizex, const int sizey)
         printf("\n");
         for(j=0; j<sizey; j++)
         {
-            printf("%d",cases[i][j]);
+            if(cases[i][j]==10)
+            printf("%d ",cases[i][j]);
+                else
+            printf(" %d ",cases[i][j]);
         }
     }
     checkmove(cases,sizex,sizey);
@@ -255,55 +263,133 @@ void fillcase(/*int **array,*/ const int sizex, const int sizey)
 void checkmove(int **array, const int sizex, const int sizey)
 {
     int verify[sizey][sizex];
-    int i,j,advcolor,a;
+    int i,j,advcolor,a,b;
+    ///On définit la couleur des pions adverse
     if(color == 10)
+    {
+        advcolor = 1;
+    }
+    else
+        advcolor = 10;
+    ///Initialisation du tableau à 0
+    for(i=0; i < sizey; i++)
+    {
+        for(j=0; j < sizex; j++)
         {
-            advcolor = 1;
-        }
-        else advcolor = 10;
-    for(i=0; i < sizey; i++){
-        for(j=0; j < sizex; j++){
-            if(array[i][j] != 0)//Si la case est occupée par un pions
-            {
-                verify[i][j] = 0;//Impossible de jouer sur cette case
-                if(array[i][j] == color)//Si la case est occupée par un de nos pions
-                {
-                    verify[i][j] = 0;
-                    if(j>0 && array[i][j-1] == advcolor){//Si il existe une case à gauche
-                            a=0;
-                    while(array[i][a]==advcolor)
-                        {
-
-                        a++;
-                        }
-                        verify[i][a] = 1;
-                    }
-                    if(j<sizex && array[i][j+1] ==advcolor)
-                        {
-                            a = 0;
-                            while(array[i][a] == advcolor)
-                                {
-                                    a++;
-                                }
-                                verify[i][a] = 1;
-                        }
-                    //On vérifie les possibilités sur la ligne
-                    //On vérifie les possibilités sur la colonne
-                    //On vérifie les possibilités sur les diagonales
-
-                }
-
-
-        }
-        else verify[i][j] = 1;
+            verify[i][j] = 0;
         }
     }
+    ///Insertion des coups possibles dans le tableau
+    for(i=0; i < sizey; i++)
+    {
+        for(j=0; j < sizex; j++)
+            if(array[i][j] == color)//Si la case est occupée par un de nos pions
+            {
+                ///Vérification des possibilités sur la ligne
+                if(j>0 && array[i][j-1] == advcolor) //Si il existe une case à gauche
+                {
+                    a=j-1;
+                    while(array[i][a]==advcolor && a >= 0)
+                    {
+
+                        a--;
+                    }
+                    if(array[i][a] == 0)
+                        verify[i][a] = 1;
+                }
+                if(j<sizex-1 && array[i][j+1] ==advcolor)
+                {
+                    a = j+1;
+                    while(array[i][a] == advcolor && a < sizex)//Tant que les pieces voisines sont celle adverses
+                    {
+                        a++;
+                    }
+                    if(array[i][a] == 0)//Si la derniere piece du plateau est libre
+                        verify[i][a] = 1;
+                }
+                ///Vérification des possibilités sur la colonne
+                if(i>0 && array[i-1][j] == advcolor)//Vers le haut
+                {
+                    a = i-1;
+                    while(array[a][j] == advcolor && a>=0)
+                    {
+                        a--;
+                    }
+                    if(array[a][j] == 0)//Si la derniere piece du plateau est libre
+                        verify[a][j] = 1;
+                }
+                if(i<sizey-1 && array[i+1][j] == advcolor)//Vers le bas
+                {
+                    a = i+1;
+                    while(array[a][j] == advcolor && a<sizey)
+                    {
+                        a++;
+                    }
+                    if(array[a][j] == 0)//Si la derniere piece du plateau est libre
+                        verify[a][j] = 1;
+                }
+
+                ///On vérifie les possibilités sur les diagonales
+                if(i<sizey-1 && j < sizex-1 && array[i+1][j+1] == advcolor)//Diagonale bas droite
+                    {
+                        a = i+1;
+                        b = j+1;
+                        while(array[a][b] == advcolor && a <sizey && b < sizex)
+                            {
+                                a++;
+                                b++;
+                            }
+                            if(array[a][b] == 0)//Si la derniere piece du plateau est libre
+                        verify[a][b] = 1;
+                    }
+                    if(i<sizey-1 && j > 0 && array[i+1][j-1] == advcolor)//Diagonale bas gauche
+                    {
+                        a = i+1;
+                        b = j-1;
+                        while(array[a][b] == advcolor && a <sizey && b >= 0)
+                            {
+                                a++;
+                                b--;
+                            }
+                            if(array[a][b] == 0)//Si la derniere piece du plateau est libre
+                        verify[a][b] = 1;
+                    }
+                    if(i> 0 && j > 0 && array[i-1][j-1] == advcolor)//Diagonale haut gauche
+                    {
+                        a = i-1;
+                        b = j-1;
+                        while(array[a][b] == advcolor && a >=0 && b >= 0)
+                            {
+                                a--;
+                                b--;
+                            }
+                            if(array[a][b] == 0)//Si la derniere piece du plateau est libre
+                        verify[a][b] = 1;
+                    }
+                        if(i> 0 && j <sizex-1 && array[i-1][j+1] == advcolor)//Diagonale haut droite
+                    {
+                        a = i-1;
+                        b = j+1;
+                        while(array[a][b] == advcolor && a >=0 && b < sizex)
+                            {
+                                a--;
+                                b++;
+                            }
+                            if(array[a][b] == 0)//Si la derniere piece du plateau est libre
+                        verify[a][b] = 1;
+                    }
+
+            }
+
+
+    }
     printf("\n");
-    for(i=0;i<sizey;i++)
-        {
-            printf("\n");
-            for(j=0;j<sizex;j++) printf("%d",verify[i][j]);
-        }
+    for(i=0; i<sizey; i++)
+    {
+        printf("\n");
+        for(j=0; j<sizex; j++)
+            printf("% d ",verify[i][j]);
+    }
 }
 
 
@@ -311,7 +397,7 @@ void checkmove(int **array, const int sizex, const int sizey)
 //inet_addr
 int main(int argc, char *argv[])
 {
-    int start;
+    /*int start;
     SOCKET sock_client = init_connection();
     connect_message(sock_client, "Gregz");
     //do{
@@ -319,7 +405,7 @@ int main(int argc, char *argv[])
     turn(sock_client);
     closesocket(sock_client);
     //}while(start!=1);*/
-    //fillcase(8,8);
+    fillcase(8,8);
 
 
     return 0;
