@@ -1,7 +1,8 @@
 # depslib dependency file v1.0
-1574770903 source:c:\users\grego\desktop\projet c\projetc\main.c
+1576146089 source:c:\users\grego\desktop\projet c\projetc\main.c
 	<stdlib.h>
 	<sys/types.h>
+	"Moves.h"
 	<winsock2.h>
 	<windows.h>
 	<time.h>
@@ -9,4 +10,12 @@
 	<stdio.h>
 	<unistd.h>
 	<stdbool.h>
+
+1576150443 source:c:\users\grego\desktop\projet c\projetc\moves.c
+	"Moves.h"
+
+1576151541 c:\users\grego\desktop\projet c\projetc\moves.h
+	<stdio.h>
+	<stdlib.h>
+	<malloc.h>
 
