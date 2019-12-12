@@ -1,22 +1,15 @@
 #include "Moves.h"
 int color = 10;
 
-void fillcase(char tab[], const int sizex, const int sizey)
+void fillcase(char tab[], const int sizex, const int sizey,SOCKET sock)
 {
     int i,j,cmpt = 0,k=0;
     int binaire[8];
     int **cases = malloc(sizeof(int*) * sizey);
     for(i = 0; i < sizey; i++)
         cases[i] = malloc(sizeof(int) * sizex);
-    int array[sizey][sizex];
-    int taille = (sizex*sizey) / 4;
     int nb;
-    /* for(i=0;i<taille;i++)
-         {
-         nb = tab[7+i];
-
-         }
-     */for(i=0; i<sizey; i++)
+     for(i=0; i<sizey; i++)
     {
         for(j=0; j<sizex; j++)
         {
@@ -25,12 +18,16 @@ void fillcase(char tab[], const int sizex, const int sizey)
                 k++;
                 cmpt = 0;
             }
-            nb = (int)tab[7+k];
+            if(cmpt == 0)///Nouveau chiffre à convertir toutes les 4 cases
+                {
+                 nb = (int)tab[7+k];
 
         if (nb >= 0)
             positiveConvertDecimalToBinary(nb,binaire);
         else
             negativeConvertDecimalToBinary(nb, binaire);
+                }
+
         if(binaire[cmpt*2] == 0 && binaire[cmpt*2+1] ==1)
             cases[i][j] = 1;
         else if(binaire[cmpt*2] == 1 && binaire[cmpt*2+1] ==0)
@@ -52,14 +49,17 @@ void fillcase(char tab[], const int sizex, const int sizey)
                 printf(" %d ",cases[i][j]);
         }
     }
-    checkmove(cases,sizex,sizey);
+    checkmove(cases,sizex,sizey,sock);
 }
 
 
-void checkmove(int **array, const int sizex, const int sizey)
+void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
 {
-    int verify[sizey][sizex];
+
     int i,j,advcolor,a,b;
+            int **verify = malloc(sizeof(int*) * sizey);
+    for(i = 0; i < sizey; i++)
+        verify[i] = malloc(sizeof(int) * sizex);
     ///On définit la couleur des pions adverse
     if(color == 10)
     {
@@ -186,6 +186,24 @@ void checkmove(int **array, const int sizex, const int sizey)
         for(j=0; j<sizex; j++)
             printf("% d ",verify[i][j]);
     }
+    choosemove(verify,sizex,sizey,sock);
+}
+void choosemove(int **array, const int sizex, const int sizey,SOCKET sock)
+{
+    int i,j;
+    char movex = 0,movey = 0;
+    for(i=0;i<sizey;i++)
+        {
+            for(j=0;j<sizex;j++)
+                {
+                if(array[i][j] == 1)
+                    {
+                        movex = j;
+                        movey = i;
+                    }
+                }
+        }
+movemessage(sock, movex, movey);
 }
 
 void positiveConvertDecimalToBinary(int n, int tab[])
