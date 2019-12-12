@@ -20,22 +20,25 @@ void fillcase(char tab[], const int sizex, const int sizey)
     {
         for(j=0; j<sizex; j++)
         {
-            cmpt++;
             if(cmpt == 4) /// Chaque nombre reprèsente 4 cases
             {
                 k++;
                 cmpt = 0;
             }
-            nb = tab[7+k];
-            if (nb >= 0)
-                positiveConvertDecimalToBinary(nb,binaire);
+            nb = (int)tab[7+k];
 
-            else
-                negativeConvertDecimalToBinary(nb, binaire);
-            if(binaire[cmpt*2] == 0 && binaire[cmpt*2+1] ==1) cases[i][j] = 1;
-            else if(binaire[cmpt*2] == 1 && binaire[cmpt*2+1] ==0) cases[i][j] = 10;
-            else if(binaire[cmpt*2] == 0 && binaire[cmpt*2+1] ==0) cases[i][j] = 0;
-            }
+        if (nb >= 0)
+            positiveConvertDecimalToBinary(nb,binaire);
+        else
+            negativeConvertDecimalToBinary(nb, binaire);
+        if(binaire[cmpt*2] == 0 && binaire[cmpt*2+1] ==1)
+            cases[i][j] = 1;
+        else if(binaire[cmpt*2] == 1 && binaire[cmpt*2+1] ==0)
+            cases[i][j] = 10;
+        else if(binaire[cmpt*2] == 0 && binaire[cmpt*2+1] ==0)
+            cases[i][j] = 0;
+            cmpt++;
+        }
     }
 
     for(i=0; i<sizex; i++)
@@ -44,14 +47,14 @@ void fillcase(char tab[], const int sizex, const int sizey)
         for(j=0; j<sizey; j++)
         {
             if(cases[i][j]==10)
-            printf("%d ",cases[i][j]);
-                else
-            printf(" %d ",cases[i][j]);
+                printf("%d ",cases[i][j]);
+            else
+                printf(" %d ",cases[i][j]);
         }
     }
     checkmove(cases,sizex,sizey);
-
 }
+
 
 void checkmove(int **array, const int sizex, const int sizey)
 {
@@ -232,7 +235,6 @@ void negativeConvertDecimalToBinary(int n, int tab[])
         while (cmpt != -1)
         {
             remainder = n % 2;
-            //printf("Step %d: %d/2, Remainder = %d, Quotient = %d\n", step++, n, remainder, n / 2);
             n /= 2;
 
 
