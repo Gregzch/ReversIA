@@ -120,7 +120,7 @@ void movemessage(SOCKET sock, char movex, char movey)
 }
 
 
-int readbegin(SOCKET sock)
+void readbegin(SOCKET sock)
 {
     char first[5];
     int i;
@@ -170,7 +170,7 @@ void read_sendOK(SOCKET sock)
     }
 }
 
-void turn(SOCKET sock)
+int turn(SOCKET sock)
 {
     char server_reply[1000];
     if((recv(sock, server_reply, 1000, 0)) < 0)
@@ -187,17 +187,24 @@ void turn(SOCKET sock)
         {
             printf(" %d ",server_reply[i]);
         }
+        if(taille > 5)
+            {
         int sizex = server_reply[5];
         int sizey = server_reply[6];
         fillcase(server_reply,sizex,sizey,sock);
         read_sendOK(sock);
+        return 0;
+            }
+            else
+                return 1;
+
     }
     ///85 Synchro
     ///taille du message
     ///Type de message
-    ///car[5] sizex 6 size y 8 la board
+    ///server_reply[5] sizex 6 sizey
+    ///server_reply 8 le plateau
     ///01 black ///10 white
-    //convertDecimalToBinary(server_reply,server_reply[5],server_reply[6]);
 
 }
 
@@ -208,15 +215,14 @@ void turn(SOCKET sock)
 //inet_addr
 int main(int argc, char *argv[])
 {
-    int i;
+    int i = 0;
     SOCKET sock_client = init_connection();
     connect_message(sock_client, "Gregz");
     readbegin(sock_client);
     do{
 
-    turn(sock_client);
-    i++;
-    }while(i<10);
+    i += turn(sock_client);
+    }while(i<2);
     closesocket(sock_client);
 
     return 0;

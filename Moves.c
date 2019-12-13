@@ -32,7 +32,7 @@ void fillcase(char tab[], const int sizex, const int sizey,SOCKET sock)
             cases[i][j] = 1;
         else if(binaire[cmpt*2] == 1 && binaire[cmpt*2+1] ==0)
             cases[i][j] = 10;
-        else if(binaire[cmpt*2] == 0 && binaire[cmpt*2+1] ==0)
+        else
             cases[i][j] = 0;
             cmpt++;
         }
@@ -242,7 +242,7 @@ void negativeConvertDecimalToBinary(int n, int tab[])
     {
         tab[0] = 1;
 
-        for (cmpt; cmpt > 1; cmpt--)
+        for (cmpt=7; cmpt > 1; cmpt--)
             tab[cmpt] = 0;
     }
 
