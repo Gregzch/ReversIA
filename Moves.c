@@ -1,5 +1,5 @@
 #include "Moves.h"
-int color = 10;
+#include "main.h"
 
 void fillcase(char tab[], const int sizex, const int sizey,SOCKET sock)
 {
@@ -80,7 +80,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
                 if(j>0 && array[i][j-1] == advcolor) //Si il existe une case à gauche
                 {
                     a=j-1;
-                    while(array[i][a]==advcolor && a >= 0)
+                    while(array[i][a]==advcolor && a > 0)
                     {
 
                         a--;
@@ -91,7 +91,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
                 if(j<sizex-1 && array[i][j+1] ==advcolor)
                 {
                     a = j+1;
-                    while(array[i][a] == advcolor && a < sizex)//Tant que les pieces voisines sont celle adverses
+                    while(array[i][a] == advcolor && a < sizex-1)//Tant que les pieces voisines sont celle adverses
                     {
                         a++;
                     }
@@ -102,7 +102,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
                 if(i>0 && array[i-1][j] == advcolor)//Vers le haut
                 {
                     a = i-1;
-                    while(array[a][j] == advcolor && a>=0)
+                    while(array[a][j] == advcolor && a>0)
                     {
                         a--;
                     }
@@ -112,7 +112,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
                 if(i<sizey-1 && array[i+1][j] == advcolor)//Vers le bas
                 {
                     a = i+1;
-                    while(array[a][j] == advcolor && a<sizey)
+                    while(array[a][j] == advcolor && a<sizey-1)
                     {
                         a++;
                     }
@@ -125,7 +125,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
                 {
                     a = i+1;
                     b = j+1;
-                    while(array[a][b] == advcolor && a <sizey && b < sizex)
+                    while(array[a][b] == advcolor && a <sizey-1 && b < sizex-1)
                     {
                         a++;
                         b++;
@@ -137,7 +137,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
                 {
                     a = i+1;
                     b = j-1;
-                    while(array[a][b] == advcolor && a <sizey && b >= 0)
+                    while(array[a][b] == advcolor && a <sizey-1 && b > 0)
                     {
                         a++;
                         b--;
@@ -149,7 +149,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
                 {
                     a = i-1;
                     b = j-1;
-                    while(array[a][b] == advcolor && a >=0 && b >= 0)
+                    while(array[a][b] == advcolor && a >0 && b > 0)
                     {
                         a--;
                         b--;
@@ -161,7 +161,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
                 {
                     a = i-1;
                     b = j+1;
-                    while(array[a][b] == advcolor && a >=0 && b < sizex)
+                    while(array[a][b] == advcolor && a >0 && b < sizex - 1)
                     {
                         a--;
                         b++;
@@ -186,10 +186,10 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
 void choosemove(int **array, const int sizex, const int sizey,SOCKET sock)
 {
     int i,j;
-    char movex = 0,movey = 0;
-    for(i=0;i<sizey;i++)
+    char movex = -1,movey = -1;
+    for(i=sizey-1;i>=0;i--)
         {
-            for(j=0;j<sizex;j++)
+            for(j=sizex-1;j>=0;j--)
                 {
                 if(array[i][j] == 1)
                     {
@@ -199,11 +199,11 @@ void choosemove(int **array, const int sizex, const int sizey,SOCKET sock)
                 }
         }
 movemessage(sock, movex, movey);
+
 }
 
 void DivisionEuclidienne(int nombre, int tab[8])// Des pointeurs pour modifier les deux valeurs
 {
-    printf("le nombre a convertir : %d\n", nombre);
     int quotient = 1, reste = 1;
     int i = 0;
     int signe = 0;
@@ -251,11 +251,6 @@ void DivisionEuclidienne(int nombre, int tab[8])// Des pointeurs pour modifier l
 
         tab[0] = 1;
     }
-    for(i=0; i < 8; i++)
-    {
-        printf("tab[%d] = %d\n", i, tab[i]);
-    }
-    printf("\n\n");
 
 }
 

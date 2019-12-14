@@ -4,7 +4,6 @@
 #include "main.h"
 void fillcase(char tab[], const int sizex, const int sizey,SOCKET sock);
 void checkmove(int **array, const int sizex, const int sizey,SOCKET sock);
-void negativeConvertDecimalToBinary(int n, int tab[]);
-void positiveConvertDecimalToBinary(int n, int tab[]);
+void DivisionEuclidienne(int nombre, int tab[8]);
 void choosemove(int **array, const int sizex, const int sizey,SOCKET sock);
 #endif // MOVES_H_INCLUDED
