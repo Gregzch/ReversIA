@@ -60,7 +60,7 @@ void sendMessage(SOCKET sock, const char *ecrit, int nbOctet)
     }
 
     //Affichage du message envoyé
-    printf("Message sent : ");
+    printf("\nMessage sent : ");
     fin = (int) ecrit[1]+4;
     for (l = 0; l < fin ; l++)
     {
@@ -175,7 +175,7 @@ int turn(SOCKET sock)
     char server_reply[1000];
     if((recv(sock, server_reply, 1000, 0)) < 0)
     {
-        printf("Read failed");
+        printf("\nRead failed");
     }
     else
     {

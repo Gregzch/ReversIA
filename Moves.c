@@ -21,13 +21,8 @@ void fillcase(char tab[], const int sizex, const int sizey,SOCKET sock)
             if(cmpt == 0)///Nouveau chiffre à convertir toutes les 4 cases
                 {
                  nb = (int)tab[7+k];
-
-        if (nb >= 0)
-            positiveConvertDecimalToBinary(nb,binaire);
-        else
-            negativeConvertDecimalToBinary(nb, binaire);
+                 DivisionEuclidienne(nb,binaire);
                 }
-
         if(binaire[cmpt*2] == 0 && binaire[cmpt*2+1] ==1)
             cases[i][j] = 1;
         else if(binaire[cmpt*2] == 1 && binaire[cmpt*2+1] ==0)
@@ -184,7 +179,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
     {
         printf("\n");
         for(j=0; j<sizex; j++)
-            printf("% d ",verify[i][j]);
+            printf(" %d ",verify[i][j]);
     }
     choosemove(verify,sizex,sizey,sock);
 }
@@ -206,71 +201,61 @@ void choosemove(int **array, const int sizex, const int sizey,SOCKET sock)
 movemessage(sock, movex, movey);
 }
 
-void positiveConvertDecimalToBinary(int n, int tab[])
+void DivisionEuclidienne(int nombre, int tab[8])// Des pointeurs pour modifier les deux valeurs
 {
-    printf("\nNombre a convertir : %d \n",n);
-    long long binaryNumber = 0;
-    int remainder, i = 1, step = 1,cmpt =7,j;
-    if(n==0)
-    {
-        for(j=0; j<8; j++)
-            tab[j] = 0;
+    printf("le nombre a convertir : %d\n", nombre);
+    int quotient = 1, reste = 1;
+    int i = 0;
+    int signe = 0;
+
+    for(i = 0; i < 8; i++)
+        tab[i] = 0;
+
+    if(nombre < 0){
+        nombre = abs(nombre) + 127;
+        signe = 1; //si nombre n gatif
     }
-    while (n != 0)
+    i=0;
+    while(quotient != 0)
     {
-        remainder = n % 2;
-        n /= 2;
-        tab[cmpt] = abs(remainder);
-        binaryNumber += remainder * i;
-        i *= 10;
-        cmpt--;
-    }
-
-    for(cmpt=0; cmpt<8; cmpt++)
-        printf("%d",tab[cmpt]);
-    printf("\n");
-}
-
-
-void negativeConvertDecimalToBinary(int n, int tab[])
-{
-    printf("Negative Convert : %d\n", n);
-    long long binaryNumber = 0;
-    int remainder, i = 1, step = 1, cmpt = 7;
-
-    if (n == -128)
-    {
-        tab[0] = 1;
-
-        for (cmpt=7; cmpt > 1; cmpt--)
-            tab[cmpt] = 0;
+        reste = nombre%2;
+        quotient = nombre/2 ;
+        tab[i] = reste;
+        i++;
+        nombre = quotient;
+        reste = 0;
     }
 
-    else
+
+
+    int conv[8];
+    int j = 7;
+    for(i = 0; i < 8; i++)
     {
-        n = abs(n);
+        conv[j] = tab[i];
+        j--;
+    }
 
-        while (cmpt != -1)
-        {
-            remainder = n % 2;
-            n /= 2;
+    for(i=0; i< 8; i ++)
+    {
+        tab[i] = conv[i];
+    }
 
-
-            if (remainder == 0)
-                tab[cmpt] = 1;
+    if(signe == 1){
+        for(i = 0; i < 8; i++){
+            if(tab[i] == 1)
+                tab[i] = 0;
             else
-                tab[cmpt] = 0;
-
-            binaryNumber += remainder * i;
-            i *= 10;
-
-            cmpt--;
+                tab[i] = 1;
         }
 
         tab[0] = 1;
     }
-    for(i=0; i<8; i++)
-        printf("%d",tab[i]);
-    printf("\n");
+    for(i=0; i < 8; i++)
+    {
+        printf("tab[%d] = %d\n", i, tab[i]);
+    }
+    printf("\n\n");
 
 }
+
