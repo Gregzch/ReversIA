@@ -159,6 +159,20 @@ void read_sendOK(SOCKET sock)
         {
             printf("%d ",server_reply[i]);
         }
+        if(server_reply[3] == 1 && server_reply[2] == 16)
+            {
+              color = 1;
+                printf("\nConnect Message Ok - Black Player");
+            }
+
+        else if(server_reply[3] == 2 && server_reply[2] == 16)
+            {
+              color = 10;
+            printf("\nConnect Message Ok - White Player");
+            }
+
+       /* else
+            {
         if(server_reply[2] != 0)
             {
         message[0] = SYNCRO;
@@ -171,6 +185,7 @@ void read_sendOK(SOCKET sock)
         sendMessage(sock,message,5);
             }
 
+    }*/
     }
 }
 
@@ -202,6 +217,7 @@ int turn(SOCKET sock)
         }
         else
         {
+
             if(server_reply[3] == 1)
             {
                 printf("\nConnect Message Ok - Black Player");
