@@ -187,7 +187,7 @@ void choosemove(int **array, const int sizex, const int sizey,SOCKET sock, int *
 {
     int i,j;
     int k = 25;
-    char movex = 7,movey = 7;
+    char movex = 255,movey = 255;
     for(i=0; i<sizey; i++)
     {
         for(j=0; j<sizex; j++)
