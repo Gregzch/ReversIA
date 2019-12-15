@@ -186,7 +186,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
 void choosemove(int **array, const int sizex, const int sizey,SOCKET sock)
 {
     int i,j;
-    char movex = -1,movey = -1;
+    char movex = 7,movey = 7;
     for(i=sizey-1;i>=0;i--)
         {
             for(j=sizex-1;j>=0;j--)

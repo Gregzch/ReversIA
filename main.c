@@ -155,18 +155,22 @@ void read_sendOK(SOCKET sock)
     else
     {
         printf("\nMessage received (5) : ");
-        for(i=0;i<5;i++)
+        for(i=0; i<5; i++)
+        {
+            printf("%d ",server_reply[i]);
+        }
+        if(server_reply[2] != 0)
             {
-               printf("%d ",server_reply[i]);
-            }
-        message[0] = SYNCRO;
+              message[0] = SYNCRO;
         message[1] = 1;
         message[2] = OKNOK_MESSAGE;
         message[3] = 1;
         for (i = 2; i < 4; i++)
-        CRC += message[i];
-    message[4] = CRC;
-    sendMessage(sock,message,5);
+            CRC += message[i];
+        message[4] = CRC;
+        sendMessage(sock,message,5);
+            }
+
     }
 }
 
@@ -188,15 +192,28 @@ int turn(SOCKET sock)
             printf(" %d ",server_reply[i]);
         }
         if(taille > 5)
+        {
+            int sizex = server_reply[5];
+            int sizey = server_reply[6];
+            fillcase(server_reply,sizex,sizey,sock);
+            read_sendOK(sock);
+            return 0;
+        }
+        else
+        {
+            if(server_reply[3] == 1)
             {
-        int sizex = server_reply[5];
-        int sizey = server_reply[6];
-        fillcase(server_reply,sizex,sizey,sock);
-        read_sendOK(sock);
-        return 0;
+                printf("\nConnect Message Ok - Black Player");
+                color = 1;
             }
             else
-                return 1;
+            {
+                printf("\nConnect Message Ok - White Player\n");
+                color = 10;
+            }
+            return 1;
+        }
+
 
     }
     ///85 Synchro
@@ -219,10 +236,16 @@ int main(int argc, char *argv[])
     SOCKET sock_client = init_connection();
     connect_message(sock_client, "Gregz");
     readbegin(sock_client);
-    do{
-
-    i += turn(sock_client);
-    }while(i<2);
+    do
+    {
+        i = turn(sock_client);
+    }
+    while(i!=1);
+    do
+    {
+        i = turn(sock_client);
+    }
+    while(i!=1);
     closesocket(sock_client);
 
     return 0;
