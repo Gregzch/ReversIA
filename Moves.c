@@ -186,7 +186,7 @@ void checkmove(int **array, const int sizex, const int sizey,SOCKET sock)
 void choosemove(int **array, const int sizex, const int sizey,SOCKET sock, int **board)
 {
     int i,j;
-    int k = 25;
+    int k = 155;
     char movex = 255,movey = 255;
     for(i=0; i<sizey; i++)
     {
@@ -196,7 +196,7 @@ void choosemove(int **array, const int sizex, const int sizey,SOCKET sock, int *
             {
                 array[i][j] += checkadv(board,array,sizex,sizey,j,i);
                 if(testBord(i, j, sizex, sizey) == 1)
-                            array[i][j] += 5;
+                            array[i][j] += 8;
             }
         }
     }
