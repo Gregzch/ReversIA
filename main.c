@@ -161,9 +161,9 @@ void read_sendOK(SOCKET sock)
         }
         if(server_reply[2] != 0)
             {
-              message[0] = SYNCRO;
+        message[0] = SYNCRO;
         message[1] = 1;
-        message[2] = OKNOK_MESSAGE;
+        message[2] = PING_MESSAGE;
         message[3] = 1;
         for (i = 2; i < 4; i++)
             CRC += message[i];
@@ -180,6 +180,7 @@ int turn(SOCKET sock)
     if((recv(sock, server_reply, 1000, 0)) < 0)
     {
         printf("\nRead failed");
+        return 1;
     }
     else
     {
